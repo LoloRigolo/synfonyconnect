@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ProfileController extends AbstractController
 {
-    #[Route('/profil/{username}', name: 'app_profile')]
+    #[Route('/profil/{username}', name: 'app_profile', requirements: ['username' => '[a-zA-Z0-9._\-]{3,30}'])]
     public function show(string $username, UserRepository $userRepository, PostRepository $postRepository): Response
     {
         $user = $userRepository->findOneBy(['username' => $username]);
