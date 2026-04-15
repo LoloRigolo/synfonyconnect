@@ -26,13 +26,18 @@
                 <nav class="site-nav">
                     <a href="{{ path('app_home') }}" class="nav-link">Hub</a>
                     <a href="#" class="nav-link">Mes posts</a>
-                    <a href="#" class="nav-link nav-link--cta">New post</a>
+                    <a href="{{ path('app_post_new') }}" class="nav-link nav-link--cta">New post</a>
                     <a href="{{ path('app_search') }}" class="nav-link">Search</a>
                 </nav>
             </div>
         </header>
 
         <main class="site-main">
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash flash--{{ type }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
             {% block body %}{% endblock %}
         </main>
 

@@ -6,6 +6,7 @@ use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -16,12 +17,16 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: 'Le contenu du post est obligatoire.')]
+    #[Assert\Length(min: 10, minMessage: 'Le contenu doit faire au moins {{ limit }} caractères.')]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(message: "L'URL de l'image n'est pas valide.")]
     private ?string $image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255, maxMessage: 'La localisation ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'post')]

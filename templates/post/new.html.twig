@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau post — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="form-page">
+    <h1 class="form-page__title">Nouveau post</h1>
+
+    {{ form_start(form, {attr: {class: 'post-form', novalidate: 'novalidate'}}) }}
+
+        <div class="form-group {{ form_errors(form.description) is not empty ? 'form-group--error' }}">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-group {{ form_errors(form.image) is not empty ? 'form-group--error' }}">
+            {{ form_label(form.image) }}
+            {{ form_widget(form.image) }}
+            {{ form_errors(form.image) }}
+        </div>
+
+        <div class="form-group {{ form_errors(form.location) is not empty ? 'form-group--error' }}">
+            {{ form_label(form.location) }}
+            {{ form_widget(form.location) }}
+            {{ form_errors(form.location) }}
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ path('app_home') }}" class="btn-cancel">Annuler</a>
+            <button type="submit" class="btn-submit">Publier</button>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
