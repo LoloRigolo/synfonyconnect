@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hub — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="hub">
+    <div class="hub-header">
+        <h1 class="hub-title">Hub</h1>
+        <div class="hub-sort">
+            <span class="sort-label">Trier par :</span>
+            <a href="{{ path('app_home', {sort: 'DESC'}) }}"
+               class="sort-btn {{ sort == 'DESC' ? 'sort-btn--active' : '' }}">
+                Plus récent
+            </a>
+            <a href="{{ path('app_home', {sort: 'ASC'}) }}"
+               class="sort-btn {{ sort == 'ASC' ? 'sort-btn--active' : '' }}">
+                Plus vieux
+            </a>
+        </div>
+    </div>
+
+    {% if posts is empty %}
+        <p class="hub-empty">Aucun post pour le moment.</p>
+    {% else %}
+        <div class="posts-grid">
+            {% for post in posts %}
+                <article class="post-card">
+                    {% if post.image %}
+                        <div class="post-card__image">
+                            <img src="{{ post.image }}" alt="Post de {{ post.user.username }}">
+                        </div>
+                    {% endif %}
+                    <div class="post-card__body">
+                        <div class="post-card__meta">
+                            <span class="post-card__author">{{ post.user.username }}</span>
+                            {% if post.location %}
+                                <span class="post-card__location">{{ post.location }}</span>
+                            {% endif %}
+                        </div>
+                        {% if post.description %}
+                            <p class="post-card__desc">{{ post.description }}</p>
+                        {% endif %}
+                        <time class="post-card__date" datetime="{{ post.createdAt|date('Y-m-d') }}">
+                            {{ post.createdAt|date('d/m/Y à H:i') }}
+                        </time>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
