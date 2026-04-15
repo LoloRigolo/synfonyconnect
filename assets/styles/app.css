@@ -256,6 +256,82 @@ body {
     margin-top: auto;
 }
 
+/* ===== Profile ===== */
+.profile-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.profile-avatar {
+    flex-shrink: 0;
+}
+
+.profile-avatar img,
+.profile-avatar__placeholder {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar__placeholder {
+    background-color: #6c63ff;
+    color: #fff;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-username {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.profile-bio {
+    font-size: 0.95rem;
+    color: #444460;
+    line-height: 1.6;
+    max-width: 560px;
+}
+
+.profile-bio--empty {
+    color: #aaaacc;
+    font-style: italic;
+}
+
+.profile-posts-count {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6c63ff;
+    background: rgba(108,99,255,0.1);
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    align-self: flex-start;
+}
+
+.profile-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 1.25rem;
+}
+
 /* ===== Page 404 ===== */
 .error-page {
     display: flex;

@@ -19,19 +19,25 @@ class AppFixtures extends Fixture
     {
         $usersData = [
             [
-                'email' => 'admin@symfoconnect.local',
+                'email'    => 'admin@symfoconnect.local',
                 'username' => 'admin',
-                'roles' => ['ROLE_ADMIN'],
+                'roles'    => ['ROLE_ADMIN'],
+                'bio'      => 'Administrateur de SymfoConnect. Passionné de Symfony et de café.',
+                'avatar'   => 'https://i.pravatar.cc/150?u=admin',
             ],
             [
-                'email' => 'alice@symfoconnect.local',
+                'email'    => 'alice@symfoconnect.local',
                 'username' => 'alice',
-                'roles' => [],
+                'roles'    => [],
+                'bio'      => 'Développeuse frontend le jour, randonneuse le week-end. J\'adore les belles vues et le bon vin.',
+                'avatar'   => 'https://i.pravatar.cc/150?u=alice',
             ],
             [
-                'email' => 'bob@symfoconnect.local',
+                'email'    => 'bob@symfoconnect.local',
                 'username' => 'bob',
-                'roles' => [],
+                'roles'    => [],
+                'bio'      => 'Ingénieur backend, amateur de café et de soirées projets. Toujours partant pour un nouveau défi.',
+                'avatar'   => 'https://i.pravatar.cc/150?u=bob',
             ],
         ];
 
@@ -43,6 +49,8 @@ class AppFixtures extends Fixture
             $user->setUsername($userData['username']);
             $user->setRoles($userData['roles']);
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
+            $user->setBio($userData['bio']);
+            $user->setAvatar($userData['avatar']);
 
             $manager->persist($user);
             $users[$userData['username']] = $user;

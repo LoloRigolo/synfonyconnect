@@ -1,23 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hub — SymfoConnect{% endblock %}
+{% block title %}{{ profileUser.username }} — SymfoConnect{% endblock %}
 
 {% block body %}
-<div class="hub">
-    <div class="hub-header">
-        <h1 class="hub-title">Hub</h1>
-        <div class="hub-sort">
-            <span class="sort-label">Trier par :</span>
-            <a href="{{ path('app_home', {sort: 'DESC'}) }}"
-               class="sort-btn {{ sort == 'DESC' ? 'sort-btn--active' : '' }}">
-                Plus récent
-            </a>
-            <a href="{{ path('app_home', {sort: 'ASC'}) }}"
-               class="sort-btn {{ sort == 'ASC' ? 'sort-btn--active' : '' }}">
-                Plus vieux
-            </a>
+<div class="profile">
+
+    <div class="profile-card">
+        <div class="profile-avatar">
+            {% if profileUser.avatar %}
+                <img src="{{ profileUser.avatar }}" alt="Avatar de {{ profileUser.username }}">
+            {% else %}
+                <div class="profile-avatar__placeholder">{{ profileUser.username|first|upper }}</div>
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <h1 class="profile-username">{{ profileUser.username }}</h1>
+            {% if profileUser.bio %}
+                <p class="profile-bio">{{ profileUser.bio }}</p>
+            {% else %}
+                <p class="profile-bio profile-bio--empty">Aucune bio renseignée.</p>
+            {% endif %}
+            <span class="profile-posts-count">
+                {{ posts|length }} post{{ posts|length > 1 ? 's' : '' }}
+            </span>
         </div>
     </div>
+
+    <h2 class="profile-section-title">Posts de {{ profileUser.username }}</h2>
 
     {% if posts is empty %}
         <p class="hub-empty">Aucun post pour le moment.</p>
@@ -27,12 +36,11 @@
                 <article class="post-card">
                     {% if post.image %}
                         <div class="post-card__image">
-                            <img src="{{ post.image }}" alt="Post de {{ post.user.username }}">
+                            <img src="{{ post.image }}" alt="Post de {{ profileUser.username }}">
                         </div>
                     {% endif %}
                     <div class="post-card__body">
                         <div class="post-card__meta">
-                            <a href="{{ path('app_profile', {username: post.user.username}) }}" class="post-card__author">{{ post.user.username }}</a>
                             {% if post.location %}
                                 <span class="post-card__location">{{ post.location }}</span>
                             {% endif %}
@@ -48,5 +56,6 @@
             {% endfor %}
         </div>
     {% endif %}
+
 </div>
 {% endblock %}
