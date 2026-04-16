@@ -144,6 +144,97 @@ body {
     border-left: 4px solid #f39c12;
 }
 
+/* ===== Auth page (register / login) ===== */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 440px;
+}
+
+.auth-card__header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-card__title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.auth-card__sub {
+    font-size: 0.9rem;
+    color: #8888aa;
+    margin-top: 0.35rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.form-group--checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.form-group--checkbox input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #6c63ff;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.form-group--checkbox label {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #444460;
+    cursor: pointer;
+}
+
+.form-group--checkbox .form-group--error {
+    flex-basis: 100%;
+}
+
+.btn-submit--full {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+.auth-card__footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #8888aa;
+}
+
+.auth-card__footer a {
+    color: #6c63ff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-card__footer a:hover {
+    text-decoration: underline;
+}
+
 /* ===== Form page ===== */
 .form-page {
     max-width: 640px;
