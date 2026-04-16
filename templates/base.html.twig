@@ -25,13 +25,9 @@
                 <a href="{{ path('app_home') }}" class="site-logo">SymfoConnect</a>
                 <nav class="site-nav">
                     <a href="{{ path('app_home') }}" class="nav-link">Hub</a>
-                    <a href="#" class="nav-link">Mes posts</a>
                     {% if app.user %}
                         <a href="{{ path('app_post_new') }}" class="nav-link nav-link--cta">New post</a>
-                    {% endif %}
-                    <a href="{{ path('app_search') }}" class="nav-link">Search</a>
-
-                    {% if app.user %}
+                        <a href="{{ path('app_feed') }}" class="nav-link">Feed</a>
                         <div class="nav-user">
                             <a href="{{ path('app_profile', {username: app.user.username}) }}" class="nav-user__name">
                                 {{ app.user.username }}

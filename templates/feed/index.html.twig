@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fil d'actualité — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="hub">
+    <div class="hub-header">
+        <h1 class="hub-title">Fil d'actualité</h1>
+    </div>
+
+    {% if followingCount == 0 %}
+        <div class="feed-empty">
+            <p class="feed-empty__title">Vous ne suivez personne pour l'instant.</p>
+            <p class="feed-empty__sub">Explorez le hub et suivez des utilisateurs pour voir leurs posts ici.</p>
+            <a href="{{ path('app_home') }}" class="btn-submit">Explorer le Hub</a>
+        </div>
+    {% elseif posts is empty %}
+        <div class="feed-empty">
+            <p class="feed-empty__title">Rien de nouveau pour l'instant.</p>
+            <p class="feed-empty__sub">Les personnes que vous suivez n'ont pas encore publié de post.</p>
+        </div>
+    {% else %}
+        <div class="posts-grid">
+            {% for post in posts %}
+                {{ include('_post_card.html.twig', {post: post, showAuthor: true}) }}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
