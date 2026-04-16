@@ -144,6 +144,47 @@ body {
     border-left: 4px solid #f39c12;
 }
 
+/* ===== Nav user ===== */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid rgba(255,255,255,0.12);
+}
+
+.nav-user__name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.nav-user__name:hover {
+    background-color: rgba(108,99,255,0.2);
+}
+
+.nav-user__logout {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #aaaacc;
+    text-decoration: none;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.nav-user__logout:hover {
+    background-color: rgba(231,76,60,0.15);
+    color: #e74c3c;
+    border-color: rgba(231,76,60,0.3);
+}
+
 /* ===== Auth page (register / login) ===== */
 .auth-page {
     display: flex;

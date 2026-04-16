@@ -28,6 +28,17 @@
                     <a href="#" class="nav-link">Mes posts</a>
                     <a href="{{ path('app_post_new') }}" class="nav-link nav-link--cta">New post</a>
                     <a href="{{ path('app_search') }}" class="nav-link">Search</a>
+
+                    {% if app.user %}
+                        <div class="nav-user">
+                            <a href="{{ path('app_profile', {username: app.user.username}) }}" class="nav-user__name">
+                                {{ app.user.username }}
+                            </a>
+                            <a href="{{ path('app_logout') }}" class="nav-user__logout">Déconnexion</a>
+                        </div>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                    {% endif %}
                 </nav>
             </div>
         </header>

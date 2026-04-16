@@ -23,7 +23,7 @@ final class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($userRepository->findOneBy(['username' => 'alice']));
+            $post->setUser($this->getUser());
             $em->persist($post);
             $em->flush();
 
