@@ -29,6 +29,13 @@
                         <a href="{{ path('app_post_new') }}" class="nav-link nav-link--cta">New post</a>
                         <a href="{{ path('app_feed') }}" class="nav-link">Feed</a>
                         <div class="nav-user">
+                            <a href="{{ path('app_notifications') }}" class="nav-notif" title="Notifications">
+                                🔔
+                                {% set unread = unread_notifications_count() %}
+                                {% if unread > 0 %}
+                                    <span class="nav-notif__badge">{{ unread }}</span>
+                                {% endif %}
+                            </a>
                             <a href="{{ path('app_profile', {username: app.user.username}) }}" class="nav-user__name">
                                 {{ app.user.username }}
                             </a>

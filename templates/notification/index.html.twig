@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="notif-page">
+    <h1 class="hub-title">Notifications</h1>
+
+    {% if notifications is empty %}
+        <div class="feed-empty">
+            <p class="feed-empty__title">Aucune notification.</p>
+            <p class="feed-empty__sub">Vous serez notifié lorsque quelqu'un commence à vous suivre.</p>
+        </div>
+    {% else %}
+        <ul class="notif-list">
+            {% for notif in notifications %}
+                <li class="notif-item {{ notif.isRead ? '' : 'notif-item--unread' }}">
+                    <a href="{{ path('app_profile', {username: notif.sender.username}) }}" class="notif-avatar">
+                        {% if notif.sender.avatar %}
+                            <img src="{{ notif.sender.avatar }}" alt="{{ notif.sender.username }}">
+                        {% else %}
+                            <div class="notif-avatar__placeholder">{{ notif.sender.username|first|upper }}</div>
+                        {% endif %}
+                    </a>
+                    <div class="notif-body">
+                        <p class="notif-content">{{ notif.content }}</p>
+                        <time class="notif-date" datetime="{{ notif.createdAt|date('Y-m-d') }}">
+                            {{ notif.createdAt|date('d/m/Y à H:i') }}
+                        </time>
+                    </div>
+                    {% if not notif.isRead %}
+                        <span class="notif-dot" title="Non lu"></span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

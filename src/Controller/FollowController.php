@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Notification;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,6 +31,14 @@ final class FollowController extends AbstractController
         }
 
         $currentUser->follow($target);
+
+        $notification = new Notification(
+            Notification::TYPE_FOLLOW,
+            sprintf('%s a commencé à vous suivre.', $currentUser->getUsername()),
+            $target,
+            $currentUser
+        );
+        $em->persist($notification);
         $em->flush();
 
         return $this->redirectToRoute('app_profile', ['username' => $username]);
