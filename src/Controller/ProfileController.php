@@ -21,9 +21,18 @@ final class ProfileController extends AbstractController
 
         $posts = $postRepository->findBy(['user' => $user], ['createdAt' => 'DESC']);
 
+        /** @var \App\Entity\User|null $currentUser */
+        $currentUser = $this->getUser();
+        $isFollowing = $currentUser && $currentUser->getId() !== $user->getId()
+            ? $currentUser->isFollowing($user)
+            : false;
+
         return $this->render('profile/show.html.twig', [
-            'profileUser' => $user,
-            'posts'       => $posts,
+            'profileUser'     => $user,
+            'posts'           => $posts,
+            'isFollowing'     => $isFollowing,
+            'followersCount'  => $user->getFollowers()->count(),
+            'followingCount'  => $user->getFollowing()->count(),
         ]);
     }
 }

@@ -521,10 +521,50 @@ body {
     flex: 1;
 }
 
+.post-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
 .post-card__date {
     font-size: 0.75rem;
     color: #aaaacc;
-    margin-top: auto;
+}
+
+.post-card__like {
+    display: flex;
+    align-items: center;
+}
+
+.btn-like {
+    background: none;
+    border: 1px solid #e0e0f0;
+    border-radius: 20px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.82rem;
+    color: #aaaacc;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.btn-like:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+    background-color: rgba(231,76,60,0.06);
+}
+
+.btn-like--active {
+    color: #e74c3c;
+    border-color: rgba(231,76,60,0.4);
+    background-color: rgba(231,76,60,0.06);
+}
+
+.like-count {
+    font-size: 0.82rem;
+    color: #aaaacc;
 }
 
 /* ===== Profile ===== */
@@ -594,6 +634,59 @@ body {
     padding: 0.2rem 0.65rem;
     border-radius: 20px;
     align-self: flex-start;
+}
+
+.profile-info__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.profile-stat {
+    font-size: 0.875rem;
+    color: #666680;
+}
+
+.profile-stat strong {
+    color: #1a1a2e;
+    font-weight: 700;
+}
+
+.btn-follow {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.45rem 1.2rem;
+    border-radius: 20px;
+    border: 2px solid #6c63ff;
+    background-color: #6c63ff;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-follow:hover {
+    background-color: #574fd6;
+    border-color: #574fd6;
+}
+
+.btn-follow--active {
+    background-color: transparent;
+    color: #6c63ff;
+}
+
+.btn-follow--active:hover {
+    background-color: rgba(231,76,60,0.08);
+    border-color: #e74c3c;
+    color: #e74c3c;
 }
 
 .profile-section-title {

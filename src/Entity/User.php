@@ -43,6 +43,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $post;
 
+    /**
+     * @var Collection<int, Post>
+     */
+    #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'likedBy')]
+    private Collection $likedPosts;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
+    #[ORM\JoinTable(name: 'user_follow',
+        joinColumns: [new ORM\JoinColumn(name: 'follower_id', referencedColumnName: 'id')],
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'followed_id', referencedColumnName: 'id')]
+    )]
+    private Collection $following;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'following')]
+    private Collection $followers;
+
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
@@ -54,7 +76,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->post = new ArrayCollection();
+        $this->post       = new ArrayCollection();
+        $this->likedPosts = new ArrayCollection();
+        $this->following  = new ArrayCollection();
+        $this->followers  = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +203,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    /** @return Collection<int, User> */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    /** @return Collection<int, User> */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function follow(User $user): static
+    {
+        if (!$this->following->contains($user)) {
+            $this->following->add($user);
+        }
+
+        return $this;
+    }
+
+    public function unfollow(User $user): static
+    {
+        $this->following->removeElement($user);
+
+        return $this;
+    }
+
+    public function isFollowing(User $user): bool
+    {
+        return $this->following->contains($user);
     }
 
     public function getBio(): ?string

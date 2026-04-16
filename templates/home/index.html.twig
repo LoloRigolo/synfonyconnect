@@ -24,27 +24,7 @@
     {% else %}
         <div class="posts-grid">
             {% for post in posts %}
-                <article class="post-card">
-                    {% if post.image %}
-                        <div class="post-card__image">
-                            <img src="{{ post.image }}" alt="Post de {{ post.user.username }}">
-                        </div>
-                    {% endif %}
-                    <div class="post-card__body">
-                        <div class="post-card__meta">
-                            <a href="{{ path('app_profile', {username: post.user.username}) }}" class="post-card__author">{{ post.user.username }}</a>
-                            {% if post.location %}
-                                <span class="post-card__location">{{ post.location }}</span>
-                            {% endif %}
-                        </div>
-                        {% if post.description %}
-                            <p class="post-card__desc">{{ post.description }}</p>
-                        {% endif %}
-                        <time class="post-card__date" datetime="{{ post.createdAt|date('Y-m-d') }}">
-                            {{ post.createdAt|date('d/m/Y à H:i') }}
-                        </time>
-                    </div>
-                </article>
+                {{ include('_post_card.html.twig', {post: post, showAuthor: true}) }}
             {% endfor %}
         </div>
     {% endif %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
@@ -33,12 +35,20 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'likedPosts')]
+    #[ORM\JoinTable(name: 'post_like')]
+    private Collection $likedBy;
+
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->likedBy   = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,6 +112,38 @@ class Post
     public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /** @return Collection<int, User> */
+    public function getLikedBy(): Collection
+    {
+        return $this->likedBy;
+    }
+
+    public function getLikesCount(): int
+    {
+        return $this->likedBy->count();
+    }
+
+    public function isLikedBy(User $user): bool
+    {
+        return $this->likedBy->contains($user);
+    }
+
+    public function addLike(User $user): static
+    {
+        if (!$this->likedBy->contains($user)) {
+            $this->likedBy->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(User $user): static
+    {
+        $this->likedBy->removeElement($user);
 
         return $this;
     }
