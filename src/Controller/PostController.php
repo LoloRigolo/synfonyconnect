@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Repository\PostRepository;
 use App\Repository\UserRepository;
+use App\Security\Voter\PostVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,5 +37,29 @@ final class PostController extends AbstractController
         return $this->render('post/new.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[Route('/post/{id}/supprimer', name: 'app_post_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function delete(int $id, PostRepository $postRepository, EntityManagerInterface $em, Request $request): Response
+    {
+        $post = $postRepository->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException('Post introuvable.');
+        }
+
+        $this->denyAccessUnlessGranted(PostVoter::DELETE, $post);
+
+        if (!$this->isCsrfTokenValid('delete_post_' . $id, $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        $em->remove($post);
+        $em->flush();
+
+        $this->addFlash('success', 'Post supprimé avec succès.');
+
+        return $this->redirect($request->headers->get('referer', $this->generateUrl('app_home')));
     }
 }

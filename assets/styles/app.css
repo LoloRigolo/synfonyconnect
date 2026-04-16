@@ -556,6 +556,30 @@ body {
     color: #aaaacc;
 }
 
+.post-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-delete {
+    background: none;
+    border: 1px solid #e0e0f0;
+    border-radius: 20px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    color: #aaaacc;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+    line-height: 1;
+}
+
+.btn-delete:hover {
+    border-color: rgba(231,76,60,0.4);
+    color: #e74c3c;
+    background-color: rgba(231,76,60,0.06);
+}
+
 .post-card__like {
     display: flex;
     align-items: center;

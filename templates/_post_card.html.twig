@@ -20,6 +20,14 @@
             <time class="post-card__date" datetime="{{ post.createdAt|date('Y-m-d') }}">
                 {{ post.createdAt|date('d/m/Y à H:i') }}
             </time>
+            <div class="post-card__actions">
+            {% if is_granted('POST_DELETE', post) %}
+                <form method="post" action="{{ path('app_post_delete', {id: post.id}) }}"
+                      onsubmit="return confirm('Supprimer ce post ?')">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_post_' ~ post.id) }}">
+                    <button type="submit" class="btn-delete" title="Supprimer">✕</button>
+                </form>
+            {% endif %}
             <div class="post-card__like">
                 {% if app.user %}
                     {% set liked = post.isLikedBy(app.user) %}
@@ -32,6 +40,7 @@
                 {% else %}
                     <span class="like-count">♥ {{ post.likesCount }}</span>
                 {% endif %}
+            </div>
             </div>
         </div>
     </div>
