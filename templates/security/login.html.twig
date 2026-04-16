@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <h1 class="auth-card__title">Connexion</h1>
+            <p class="auth-card__sub">Content de te revoir !</p>
+        </div>
+
+        {% if error %}
+            <div class="flash flash--error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="flash flash--success">
+                Connecté en tant que {{ app.user.userIdentifier }}. <a href="{{ logout_path() }}">Se déconnecter</a>
+            </div>
+        {% endif %}
+
+        <form method="post" class="auth-form">
+            <div class="form-group">
+                <label for="username">Adresse e-mail</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="username"
+                       autocomplete="email" required autofocus placeholder="toi@exemple.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" name="_password" id="password"
+                       autocomplete="current-password" required placeholder="••••••••">
+            </div>
+
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="btn-submit btn-submit--full">Se connecter</button>
+        </form>
+
+        <p class="auth-card__footer">
+            Pas encore de compte ? <a href="{{ path('app_register') }}">S'inscrire</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
