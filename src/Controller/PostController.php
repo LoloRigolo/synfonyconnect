@@ -7,6 +7,7 @@ use App\Form\PostType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\PostVoter;
+use App\Service\FeedCacheService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,16 +19,20 @@ final class PostController extends AbstractController
 {
     #[Route('/post/nouveau', name: 'app_post_new')]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
+    public function new(Request $request, EntityManagerInterface $em, UserRepository $userRepository, FeedCacheService $feedCache): Response
     {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($this->getUser());
+            /** @var \App\Entity\User $author */
+            $author = $this->getUser();
+            $post->setUser($author);
             $em->persist($post);
             $em->flush();
+
+            $feedCache->invalidateFollowersOf($author);
 
             $this->addFlash('success', 'Votre post a bien été publié !');
 
@@ -41,7 +46,7 @@ final class PostController extends AbstractController
 
     #[Route('/post/{id}/supprimer', name: 'app_post_delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function delete(int $id, PostRepository $postRepository, EntityManagerInterface $em, Request $request): Response
+    public function delete(int $id, PostRepository $postRepository, EntityManagerInterface $em, Request $request, FeedCacheService $feedCache): Response
     {
         $post = $postRepository->find($id);
 
@@ -55,8 +60,13 @@ final class PostController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
+        /** @var \App\Entity\User $author */
+        $author = $post->getUser();
+
         $em->remove($post);
         $em->flush();
+
+        $feedCache->invalidateFollowersOf($author);
 
         $this->addFlash('success', 'Post supprimé avec succès.');
 

@@ -25,3 +25,7 @@ services:
     App\State\PostStateProcessor:
         bind:
             $persistProcessor: '@ApiPlatform\Doctrine\Common\State\PersistProcessor'
+
+    App\Service\FeedCacheService:
+        bind:
+            $cache: '@feed.cache'

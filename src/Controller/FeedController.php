@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\PostRepository;
+use App\Service\FeedCacheService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,12 +12,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class FeedController extends AbstractController
 {
     #[Route('/feed', name: 'app_feed')]
-    public function index(PostRepository $postRepository): Response
+    public function index(FeedCacheService $feedCache): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        $posts         = $postRepository->findFeedForUser($user);
+        $posts          = $feedCache->getFeedForUser($user);
         $followingCount = $user->getFollowing()->count();
 
         return $this->render('feed/index.html.twig', [
