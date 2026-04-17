@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversation avec {{ other.username }} — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="conv-page">
+
+    <div class="conv-page__header">
+        <a href="{{ path('app_messages') }}" class="conv-back">← Retour</a>
+        <a href="{{ path('app_profile', {username: other.username}) }}" class="conv-page__partner">
+            {% if other.avatar %}
+                <img src="{{ other.avatar }}" alt="{{ other.username }}" class="conv-page__avatar">
+            {% else %}
+                <div class="conv-page__avatar conv-page__avatar--placeholder">{{ other.username|first|upper }}</div>
+            {% endif %}
+            <span>{{ other.username }}</span>
+        </a>
+    </div>
+
+    <div class="conv-thread" id="thread">
+        {% if messages is empty %}
+            <p class="conv-thread__empty">Démarrez la conversation !</p>
+        {% else %}
+            {% for message in messages %}
+                {% set isMine = message.sender == app.user %}
+                <div class="bubble-wrap {{ isMine ? 'bubble-wrap--right' : 'bubble-wrap--left' }}">
+                    <div class="bubble {{ isMine ? 'bubble--mine' : 'bubble--theirs' }}">
+                        <p class="bubble__content">{{ message.content }}</p>
+                        <time class="bubble__time" datetime="{{ message.createdAt|date('Y-m-d') }}">
+                            {{ message.createdAt|date('H:i') }}
+                        </time>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <form method="post" action="{{ path('app_conversation', {username: other.username}) }}" class="conv-form">
+        <input type="hidden" name="_token" value="{{ csrf_token('message_' ~ other.id) }}">
+        <textarea name="content" class="conv-input" placeholder="Écrire un message…" rows="1" maxlength="2000" required></textarea>
+        <button type="submit" class="conv-send">Envoyer</button>
+    </form>
+
+</div>
+
+<script>
+    document.getElementById('thread').scrollTop = document.getElementById('thread').scrollHeight;
+</script>
+{% endblock %}

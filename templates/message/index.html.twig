@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messages — SymfoConnect{% endblock %}
+
+{% block body %}
+<div class="messages-page">
+    <h1 class="hub-title">Messages</h1>
+
+    {% if conversations is empty %}
+        <div class="feed-empty">
+            <p class="feed-empty__title">Aucune conversation.</p>
+            <p class="feed-empty__sub">Visitez le profil d'un utilisateur pour lui envoyer un message.</p>
+        </div>
+    {% else %}
+        <ul class="conv-list">
+            {% for conv in conversations %}
+                <li class="conv-item {{ conv.unreadCount > 0 ? 'conv-item--unread' : '' }}">
+                    <a href="{{ path('app_conversation', {username: conv.partner.username}) }}" class="conv-link">
+                        <div class="conv-avatar">
+                            {% if conv.partner.avatar %}
+                                <img src="{{ conv.partner.avatar }}" alt="{{ conv.partner.username }}">
+                            {% else %}
+                                <div class="conv-avatar__placeholder">{{ conv.partner.username|first|upper }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="conv-body">
+                            <div class="conv-header">
+                                <span class="conv-username">{{ conv.partner.username }}</span>
+                                <span class="conv-date">{{ conv.lastMessage.createdAt|date('d/m à H:i') }}</span>
+                            </div>
+                            <p class="conv-preview">
+                                {% if conv.lastMessage.sender == app.user %}
+                                    <span class="conv-you">Vous :</span>
+                                {% endif %}
+                                {{ conv.lastMessage.content|length > 60
+                                    ? conv.lastMessage.content|slice(0, 60) ~ '…'
+                                    : conv.lastMessage.content }}
+                            </p>
+                        </div>
+                        {% if conv.unreadCount > 0 %}
+                            <span class="conv-badge">{{ conv.unreadCount }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

@@ -18,17 +18,20 @@
                 <h1 class="profile-username">{{ profileUser.username }}</h1>
 
                 {% if app.user and app.user.username != profileUser.username %}
-                    {% if isFollowing %}
-                        <form method="post" action="{{ path('app_unfollow', {username: profileUser.username}) }}">
-                            <input type="hidden" name="_token" value="{{ csrf_token('unfollow_' ~ profileUser.id) }}">
-                            <button type="submit" class="btn-follow btn-follow--active">Ne plus suivre</button>
-                        </form>
-                    {% else %}
-                        <form method="post" action="{{ path('app_follow', {username: profileUser.username}) }}">
-                            <input type="hidden" name="_token" value="{{ csrf_token('follow_' ~ profileUser.id) }}">
-                            <button type="submit" class="btn-follow">Suivre</button>
-                        </form>
-                    {% endif %}
+                    <div class="profile-actions">
+                        {% if isFollowing %}
+                            <form method="post" action="{{ path('app_unfollow', {username: profileUser.username}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('unfollow_' ~ profileUser.id) }}">
+                                <button type="submit" class="btn-follow btn-follow--active">Ne plus suivre</button>
+                            </form>
+                        {% else %}
+                            <form method="post" action="{{ path('app_follow', {username: profileUser.username}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('follow_' ~ profileUser.id) }}">
+                                <button type="submit" class="btn-follow">Suivre</button>
+                            </form>
+                        {% endif %}
+                        <a href="{{ path('app_conversation', {username: profileUser.username}) }}" class="btn-message">Message</a>
+                    </div>
                 {% endif %}
             </div>
 
