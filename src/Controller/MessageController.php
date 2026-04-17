@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Message\NewMessageNotification;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -33,7 +35,8 @@ final class MessageController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         MessageRepository $messageRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        MessageBusInterface $bus,
     ): Response {
         /** @var \App\Entity\User $currentUser */
         $currentUser = $this->getUser();
@@ -64,6 +67,14 @@ final class MessageController extends AbstractController
                 $message = new Message($currentUser, $other, $content);
                 $em->persist($message);
                 $em->flush();
+
+                $bus->dispatch(new NewMessageNotification(
+                    messageId:         $message->getId(),
+                    senderUsername:    $currentUser->getUsername(),
+                    recipientEmail:    $other->getEmail(),
+                    recipientUsername: $other->getUsername(),
+                    contentPreview:    $content,
+                ));
             }
 
             return $this->redirectToRoute('app_conversation', ['username' => $username]);
