@@ -2,37 +2,71 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post as ApiPost;
 use App\Repository\PostRepository;
+use App\State\PostStateProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['post:read']],
+        ),
+        new Get(
+            normalizationContext: ['groups' => ['post:read']],
+        ),
+        new ApiPost(
+            normalizationContext:   ['groups' => ['post:read']],
+            denormalizationContext: ['groups' => ['post:write']],
+            security:   "is_granted('ROLE_USER')",
+            processor:  PostStateProcessor::class,
+        ),
+    ],
+    paginationEnabled: true,
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'description'   => 'partial',
+    'user.username' => 'partial',
+])]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['post:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\NotBlank(message: 'Le contenu du post est obligatoire.')]
     #[Assert\Length(min: 10, minMessage: 'Le contenu doit faire au moins {{ limit }} caractères.')]
+    #[Groups(['post:read', 'post:write'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Url(message: "L'URL de l'image n'est pas valide.")]
+    #[Groups(['post:read', 'post:write'])]
     private ?string $image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255, maxMessage: 'La localisation ne peut pas dépasser {{ limit }} caractères.')]
+    #[Groups(['post:read', 'post:write'])]
     private ?string $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'post')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post:read'])]
     private ?User $user = null;
 
     /**
@@ -43,6 +77,7 @@ class Post
     private Collection $likedBy;
 
     #[ORM\Column]
+    #[Groups(['post:read'])]
     private ?DateTimeImmutable $createdAt = null;
 
     public function __construct()
@@ -122,6 +157,7 @@ class Post
         return $this->likedBy;
     }
 
+    #[Groups(['post:read'])]
     public function getLikesCount(): int
     {
         return $this->likedBy->count();
